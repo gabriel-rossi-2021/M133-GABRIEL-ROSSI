@@ -1,1 +1,3 @@
-admin:$2y$10$MdXl.tdSOluzzSwENgTqB.4JykUxfbesKFRFzHEYJ1m.UOFM1kCmO
+admin:$2y$10$ynmJWUqDz/OSK67YUpmvVuQ7NpE9Cz9lRhYo/ExJpKj/xVVnHd2kS
+test:$2y$10$ehGZSsuRGsbLt3ngu6qfv.pyFVS24exg39F3yhPvDn5fLbmM7N2Ti
+rossig:$2y$10$HLpKk6HY8f3wE7r7QXol1.8xzBsr0Fe4LMOLQYgeiJY2/3l5.98pq

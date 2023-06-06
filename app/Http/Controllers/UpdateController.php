@@ -10,18 +10,34 @@ class UpdateController extends Controller
 {
     public function index()
     {
+        // RÉCUPÉRER LE NOM D'UTILISATEUR DE LA SESSION OUVERTE
+        $sessionUsername = session('user')->username;
+
+        // CHEMIN VERS LES FICHIERS
         $authFilePath = base_path('resources/data/connexion.txt');
         $dataFilePath = base_path('resources/data/data.txt');
 
-        $authData = File::get($authFilePath);
-        $data = File::get($dataFilePath);
+        // LECTURE DU FICHIER connexion.txt
+        $users = file($authFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-        // Séparez les données dans un tableau
-        $authData = explode(':', $authData);
-        $data = explode(':', $data);
+        // RECHERCHER LA LIGNE CORRESPONDANTE AU NOM D'UTILISATEUR
+        $lineNumber = false;
+        foreach ($users as $key => $user) {
+            $credentials = explode(':', $user);
+            if ($sessionUsername == $credentials[0]) {
+                $lineNumber = $key;
+                session(['lineNumber' => $lineNumber]); // PERMET DE LE RECUPERER DANS D'AUTRE FONCTION
+                break;
+            }
+        }
 
-        // Récupérez les valeurs individuelles
-        $username = $authData[0];
+        // LECTURE DU FICHIER data.txt
+        $dataLines = file($dataFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+        // RÉCUPÉRER LES DONNÉES DE L'UTILISATEUR
+        $dataLine = $dataLines[$lineNumber];
+        $data = explode(':', $dataLine);
+
         $email = $data[0];
         $civilite = $data[1];
         $rue = $data[2];
@@ -29,10 +45,11 @@ class UpdateController extends Controller
         $ville = $data[4];
 
         // Passez les données à la vue
-        return view('updateCompte', compact('username', 'email', 'civilite', 'rue', 'npa', 'ville'));
+        return view('updateCompte', compact('sessionUsername','email', 'civilite', 'rue', 'npa', 'ville'));
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         // VALIDE LES ENTREES
         $validateData = $request->validate([
             'username' => 'required|regex:/^[^A-Z@]*$/|max:20',
@@ -52,7 +69,35 @@ class UpdateController extends Controller
             'ville.regex' => "La ville ne doit contenir que des lettres, des espaces et des apostrophes."
         ]);
 
-        // RECUPERER LES DONNEES
+
+        // RÉCUPÉRER LE NOM D'UTILISATEUR DE LA SESSION OUVERTE
+        $sessionUsername = session('user')->username;
+
+        // CHEMIN VERS LES FICHIERS
+        $authFilePath = base_path('resources/data/connexion.txt');
+        $dataFilePath = base_path('resources/data/data.txt');
+
+        // LECTURE DU FICHIER connexion.txt
+        $users = file($authFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+        // RECHERCHER LA LIGNE CORRESPONDANTE AU NOM D'UTILISATEUR
+        $lineNumber = false;
+        foreach ($users as $key => $user) {
+            $credentials = explode(':', $user);
+            if ($sessionUsername == $credentials[0]) {
+                $lineNumber = $key;
+                break;
+            }
+        }
+
+        // LECTURE DES FICHIERS
+        $authLines = file($authFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $dataLines = file($dataFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+        // RÉCUPÉRER LES DONNÉES DE L'UTILISATEUR
+        $dataLine = $dataLines[$lineNumber];
+        $data = explode(':', $dataLine);
+
         $login = $validateData['username'];
         $pwd = $validateData['pwd'];
         $email = $validateData['email'];
@@ -60,23 +105,22 @@ class UpdateController extends Controller
         $rue = $validateData['rue'];
         $npa = $validateData['npa'];
         $ville = $validateData['ville'];
-
         // HASHAGE MOT DE PASSE
         $pwdHash = Hash::make($pwd);
 
-        // CHEMIN VERS LES FICHIERS
-        $authFilePath = base_path('resources/data/connexion.txt');
-        $dataFilePath = base_path('resources/data/data.txt');
-
         // MODIFIER LE FICHIER connexion.txt
-        $authData = $login . ":" . $pwdHash;
-        File::put($authFilePath, $authData);
+        $authLines[$lineNumber] = $login . ":" . $pwdHash;
+        $updatedAuth = implode("\n", $authLines);
+        file_put_contents($authFilePath, $updatedAuth, LOCK_EX);
+        // Mettre à jour le nom d'utilisateur dans la session
+        session(['user' => (object) ['username' => $login]]);
 
         // MODIFIER LE FICHIER data.txt
-        $data = $email . ":" . $civilite. ":" . $rue . ":" . $npa . ":" . $ville;
-        File::put($dataFilePath, $data);
+        $dataLines[$lineNumber] = $email . ":" . $civilite. ":" . $rue . ":" . $npa . ":" . $ville;
+        $updatedData = implode("\n", $dataLines);
+        file_put_contents($dataFilePath, $updatedData, LOCK_EX);
 
-        // MESSAGE DE SUCCES
+        // MESSAGE DE SUCCÈS
         return redirect()->route('vue_index')->with('success', 'Les informations ont été mises à jour');
     }
 }

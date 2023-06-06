@@ -12,13 +12,13 @@
           <br><br>
 
         <div class="aboutus-section" style="margin-top:5%;">
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
                   <div class="row-phone">
                       <div class="col-md-3 col-sm-6 col-xs-12" style="width: 100%">
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                           <div class="aboutus" style="text-align:justify">
                               <h2 class="aboutus-title">Présentation</h2>
                               <p class="aboutus-text" style="line-height:revert;">Je suis un apprenti informaticien en 3ème années d'apprentissage. Je décide de lancer ma petite entreprise de support informatique</p>

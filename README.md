@@ -10,3 +10,5 @@
     <li>Installer npm (npm install)</li>
     <li>Lancer le run dev (npm run dev)</h1>
 </ul>
+
+<p>Les credentials sont dans le rapport</p>

@@ -2,6 +2,11 @@
 
 @section('content')
     <section id="section-connexion">
+        @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         <div class="container-fluid" id="container-flui-connexion">
             <div class="div-connexion-form">
                 <h1>Connexion</h1>

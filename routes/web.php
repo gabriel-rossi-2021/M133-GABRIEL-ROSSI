@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\CompteController;
 use App\Http\Controllers\UpdateController;
@@ -13,6 +14,10 @@ Route::get('/', [IndexController::class, 'index'])->name('vue_index');
 // ROUTE POUR LA VUE CONNEXION
 Route::get('/connexion', [AuthController::class, 'index'])->name('vue_connexion');
 Route::post('/connexion', [AuthController::class, 'store'])->name('store_connexion');
+
+// ROUTE POUR LA VUE INSCRIPTION
+Route::get('/inscription', [InscriptionController::class, 'index'])->name('vue_inscription');
+Route::post('/inscription', [InscriptionController::class, 'store'])->name('store_inscription');
 
 // ROUTE POUR LA VUE COMPTE
 Route::get('/compte', [CompteController::class, 'index'])->name('vue_conpte')->middleware('auth.personnel'); // NE PEUX PAS ACCEDER SI PAS CONNECTER

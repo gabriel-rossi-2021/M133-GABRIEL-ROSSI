@@ -10,7 +10,7 @@
                     @csrf
                     <div class="form-group">
                         <label for="username" class="form-label">Nom d'utilisateur :</label>
-                        <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" placeholder="" value="{{ $username }}">
+                        <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" placeholder="" value="{{ $sessionUsername }}">
                         @error('username')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

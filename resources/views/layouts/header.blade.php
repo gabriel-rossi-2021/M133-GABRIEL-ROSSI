@@ -57,11 +57,16 @@
                             <a class="nav-link" style="color:#2c6db8;"href="{{ route('vue_update') }}">PROFIL</a>
                         </li>
                     @endif
-                    <li class="nav-item" style="text-align:right">
+                    <li class="nav-item">
                         @if(Session::has('user'))
                             <a class="nav-link" href="{{ route('logout') }}">DECONNEXION</a>
                         @else
                             <a class="nav-link" href="{{ route('vue_connexion') }}">CONNEXION</a>
+                        @endif
+                    </li>
+                    <li>
+                        @if(!Session::has('user'))
+                            <a class="nav-link" href="{{ route('vue_inscription') }}">INSCRIPTION</a>
                         @endif
                     </li>
                 </ul>

@@ -1,1 +1,3 @@
-big-r@gmail.com:Autres:Chemin de Rente 4:1030:Bussigny
+big-r-admin@gmail.com:Monsieur:Rue de l'administration 20:1007:Lausanne
+test@gmail.com:Monsieur:Chemin de Rente 4:1030:Bussigny
+gabir2004@gmail.com:Monsieur:Route de Chavannes 64:1007:Lausanne
