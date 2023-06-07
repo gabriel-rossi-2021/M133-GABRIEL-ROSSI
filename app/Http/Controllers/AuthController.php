@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         // Si les informations d'identification ne sont pas valides, l'utilisateur est redirigé vers la page de connexion avec un message d'erreur
         return redirect()->back()->withInput($request->only('email'))->withErrors([
-            'error' => "L'email et/ou le mot de passe ne sont pas valides."
+            'error' => "L'utilisateur et/ou le mot de passe ne sont pas valides."
         ]);
     }
 
